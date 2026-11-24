@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rbgrab"
+dynamic = ["version"]
+description = "Hotkey search bar that grabs songs from YouTube Music into your rekordbox library"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+dependencies = [
+    "yt-dlp",
+    "ytmusicapi",
+    "pystray",
+    "pillow",
+    "pynput; sys_platform == 'darwin'",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "pyinstaller"]
+
+[project.gui-scripts]
+rbgrab = "rbgrab.__main__:main"
+
+[project.urls]
+Homepage = "https://github.com/neelb1/rbgrab"
+
+[tool.setuptools.packages.find]
+include = ["rbgrab*"]
+
+[tool.setuptools.dynamic]
+version = { attr = "rbgrab.__version__" }
