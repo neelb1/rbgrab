@@ -1,12 +1,12 @@
-# rbgrab
+# rbgrab: YouTube Music downloader for rekordbox
 
-rbgrab downloads songs from YouTube Music and puts them in a playlist you can open in rekordbox while you're DJing. Press Ctrl+Alt+S, type a song and hit Enter.
+rbgrab is a free, open-source desktop app for DJs on Windows and Mac. It downloads songs from YouTube Music with yt-dlp and puts them in a playlist you can open in rekordbox while you're DJing. Press Ctrl+Alt+S, type a song and hit Enter.
 
-<img src="docs/search.png" width="720" alt="Search bar">
+<img src="docs/search.png" width="720" alt="rbgrab search bar showing YouTube Music results">
 
-It stays in the tray and shows up to five results as you type, including remixes that were only uploaded as videos. If yt-dlp already saved a song to one of your music folders, the result is marked "✓ in library" and rbgrab won't download that video again. You don't need an account.
+It stays in the tray (the menu bar on Mac) and shows up to five results as you type, including remixes that were only uploaded as videos. If yt-dlp already saved a song to one of your music folders, the result is marked "✓ in library" and rbgrab won't download that video again. You don't need an account.
 
-## Install
+## Install on Windows or Mac
 
 On Windows, paste this into PowerShell:
 
@@ -26,13 +26,15 @@ The installer also downloads [yt-dlp](https://github.com/yt-dlp/yt-dlp), plus ff
 
 rbgrab starts when you log in unless you turn that off in Settings. To uninstall, run the same command with `uninstall.ps1` or `uninstall.sh`. Your downloaded music stays where it is.
 
-## Set up rekordbox
+## Add the playlist to rekordbox
 
 You only have to do this once. The window that opens on first launch has the same steps.
 
 1. In rekordbox, go to Preferences > Advanced > Database > rekordbox xml and choose the `rekordbox.xml` in your rbgrab download folder. The setup window has a "Copy path" button for it.
 2. Go to Preferences > View > Layout and tick "rekordbox xml".
 3. New songs show up under rekordbox xml > Playlists > rbgrab. Click the refresh icon to load them, then drag one to a deck.
+
+It's been used with rekordbox 7 on Windows. Your DJ controller doesn't matter, since rbgrab only adds songs to a playlist.
 
 ## Using it
 
@@ -45,7 +47,7 @@ You only have to do this once. The window that opens on first launch has the sam
 
 Paste a YouTube or YouTube Music link to grab that exact video. You can have several downloads going at once, and the bar shows their progress.
 
-<img src="docs/grabbed.png" width="720" alt="A finished grab">
+<img src="docs/grabbed.png" width="720" alt="A song downloaded and added to the rekordbox playlist">
 
 With the bar closed, a small popup in the corner tells you when a song is ready, already in your library, or failed. On Windows it doesn't take keyboard focus away from rekordbox.
 
