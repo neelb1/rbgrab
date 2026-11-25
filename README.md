@@ -2,7 +2,7 @@
 
 rbgrab downloads songs from YouTube Music and puts them in a playlist you can open in rekordbox while you're DJing. Press Ctrl+Alt+S, type a song and hit Enter.
 
-![Search bar](docs/search.png)
+<img src="docs/search.png" width="720" alt="Search bar">
 
 It stays in the tray and shows up to five results as you type, including remixes that were only uploaded as videos. If yt-dlp already saved a song to one of your music folders, the result is marked "✓ in library" and rbgrab won't download that video again. You don't need an account.
 
@@ -45,9 +45,11 @@ You only have to do this once. The window that opens on first launch has the sam
 
 Paste a YouTube or YouTube Music link to grab that exact video. You can have several downloads going at once, and the bar shows their progress.
 
-![A finished grab](docs/grabbed.png)
+<img src="docs/grabbed.png" width="720" alt="A finished grab">
 
 With the bar closed, a small popup in the corner tells you when a song is ready, already in your library, or failed. On Windows it doesn't take keyboard focus away from rekordbox.
+
+<img src="docs/toast.png" width="400" alt="Popups for a finished song, a song you already have, and a failed download">
 
 Settings is in the tray icon's menu. You can change the shortcut, download folder, playlist name and format there (M4A as downloaded, or MP3 320), add music folders to check for songs you already have, and choose whether rbgrab starts at login or hides the bar after a grab.
 
