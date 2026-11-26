@@ -13,6 +13,21 @@ $tmp = Join-Path $env:TEMP ("rbgrab-" + [guid]::NewGuid())
 
 function Step($text) { Write-Host "  -> $text" -ForegroundColor Cyan }
 
+# Downloads retry a few times: big GitHub downloads sometimes get cut off, more often behind a VPN.
+# curl.exe ships with Windows 10 and later and copes with dropped connections better.
+function Download($url, $out) {
+    $curl = Join-Path $env:SystemRoot "System32\curl.exe"
+    for ($try = 1; $try -le 3; $try++) {
+        if (Test-Path $curl) {
+            & $curl -fsSL -o $out $url  # no --retry: some curl builds then exit 0 on a 404
+            if ($LASTEXITCODE -eq 0 -and (Test-Path $out)) { return }
+        }
+        try { Invoke-WebRequest $url -OutFile $out; return } catch {}
+        if ($try -lt 3) { Write-Host "     download failed, trying again..." -ForegroundColor DarkGray; Start-Sleep 2 }
+    }
+    throw "Couldn't download $url`nCheck your internet connection (a VPN can cause this) and run the install command again."
+}
+
 Write-Host "`nInstalling rbgrab`n" -ForegroundColor White
 New-Item -ItemType Directory -Force -Path $bin, $tmp | Out-Null
 Get-Process rbgrab -ErrorAction SilentlyContinue | Stop-Process -Force
@@ -20,19 +35,19 @@ Get-Process rbgrab -ErrorAction SilentlyContinue | Stop-Process -Force
 Step "Downloading rbgrab"
 $zip = Join-Path $tmp "rbgrab.zip"
 if ($env:RBGRAB_ZIP) { Copy-Item $env:RBGRAB_ZIP $zip }  # local build, for testing
-else { Invoke-WebRequest "https://github.com/$repo/releases/latest/download/rbgrab-windows-x64.zip" -OutFile $zip }
+else { Download "https://github.com/$repo/releases/latest/download/rbgrab-windows-x64.zip" $zip }
 if (Test-Path $appDir) { Remove-Item $appDir -Recurse -Force }
 Expand-Archive $zip -DestinationPath $appDir
 
 Step "Downloading yt-dlp"
-Invoke-WebRequest "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe" -OutFile (Join-Path $bin "yt-dlp.exe")
+Download "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe" (Join-Path $bin "yt-dlp.exe")
 
 if ((Test-Path (Join-Path $bin "ffmpeg.exe")) -or (Get-Command ffmpeg -ErrorAction SilentlyContinue)) {
     Step "ffmpeg already installed"
 } else {
     Step "Downloading ffmpeg (about 100 MB, one time)"
     $ff = Join-Path $tmp "ffmpeg.zip"
-    Invoke-WebRequest "https://github.com/yt-dlp/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip" -OutFile $ff
+    Download "https://github.com/yt-dlp/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip" $ff
     Expand-Archive $ff -DestinationPath $tmp
     Get-ChildItem $tmp -Recurse -Include ffmpeg.exe, ffprobe.exe | Copy-Item -Destination $bin -Force
 }
